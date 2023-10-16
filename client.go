@@ -36,17 +36,17 @@ func (e *Error) Error() string {
 
 func NewConfig(clientID, clientSecret, redirectURL string) *Config {
 	apiEndpoint := os.Getenv("AKERUN_API_ENDPOINT")
-	if apiEndpoint != "" {
+	if apiEndpoint == "" {
 		apiEndpoint = APIEndpoint
 	}
 
 	oauth2AuthURL := os.Getenv("AKERUN_OAUTH2_AUTH_URL")
-	if oauth2AuthURL != "" {
+	if oauth2AuthURL == "" {
 		oauth2AuthURL = Oauth2AuthURL
 	}
 
 	oauth2TokenURL := os.Getenv("AKERUN_OAUTH2_TOKEN_URL")
-	if oauth2TokenURL != "" {
+	if oauth2TokenURL == "" {
 		oauth2TokenURL = Oauth2TokenURL
 	}
 
