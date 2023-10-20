@@ -7,6 +7,15 @@ import (
 	"golang.org/x/oauth2"
 )
 
+// TokenInfo represents the structure of the token information.
+type TokenInfo struct {
+	ApplicationName string `json:"application_name"`
+	AccessToken     string `json:"access_token"`
+	RefreshToken    string `json:"refresh_token"`
+	CreatedAt       string `json:"created_at"`
+	ExpiresAt       string `json:"expires_at"`
+}
+
 // AuthCodeURL returns a URL to OAuth 2.0 provider's consent page that asks for permissions for the required scopes explicitly.
 func (c *Client) AuthCodeURL(state string, opts ...oauth2.AuthCodeOption) string {
 	return c.config.Oauth2.AuthCodeURL(state, opts...)
@@ -36,4 +45,14 @@ func (c *Client) Revoke(ctx context.Context, token *oauth2.Token) error {
 	}
 
 	return nil
+}
+
+// GetTokenInfo retrieves the token information for the given OAuth2 token.
+func (c *Client) GetTokenInfo(ctx context.Context, token *oauth2.Token) (*TokenInfo, error) {
+	var result TokenInfo
+	err := c.call(ctx, "oauth/token/info", http.MethodGet, token, nil, nil, &result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
 }
