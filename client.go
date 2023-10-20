@@ -14,15 +14,15 @@ import (
 )
 
 const (
-	APIEndpoint    = "https://api.akerun.com"
-	APIPath1       = "/v3"
+	APIUrl         = "https://api.akerun.com"
+	APIVerison     = "/v3"
 	Oauth2AuthURL  = "https://api.akerun.com/oauth/authorize"
 	Oauth2TokenURL = "https://api.akerun.com/oauth/token"
 )
 
 type Config struct {
-	APIEndpoint string
-	Oauth2      *oauth2.Config
+	APIUrl string
+	Oauth2 *oauth2.Config
 }
 
 type Error struct {
@@ -35,9 +35,9 @@ func (e *Error) Error() string {
 }
 
 func NewConfig(clientID, clientSecret, redirectURL string) *Config {
-	apiEndpoint := os.Getenv("AKERUN_API_ENDPOINT")
-	if apiEndpoint == "" {
-		apiEndpoint = APIEndpoint
+	apiUrl := os.Getenv("AKERUN_API_URL")
+	if apiUrl == "" {
+		apiUrl = APIUrl
 	}
 
 	oauth2AuthURL := os.Getenv("AKERUN_OAUTH2_AUTH_URL")
@@ -51,7 +51,7 @@ func NewConfig(clientID, clientSecret, redirectURL string) *Config {
 	}
 
 	return &Config{
-		APIEndpoint: apiEndpoint,
+		APIUrl: apiUrl,
 		Oauth2: &oauth2.Config{
 			ClientID:     clientID,
 			ClientSecret: clientSecret,
@@ -76,7 +76,7 @@ func NewClient(config *Config) *Client {
 
 func (c *Client) call(
 	ctx context.Context,
-	apiPath string,
+	apiEndpoint string,
 	method string,
 	oauth2Token *oauth2.Token,
 	queryParams url.Values,
@@ -94,7 +94,7 @@ func (c *Client) call(
 	}
 
 	body = bytes.NewBuffer(jsonParams)
-	req, err := c.newRequest(ctx, apiPath, method, contentType, queryParams, body)
+	req, err := c.newRequest(ctx, apiEndpoint, method, contentType, queryParams, body)
 	if err != nil {
 		return err
 	}
@@ -104,18 +104,18 @@ func (c *Client) call(
 
 func (c *Client) newRequest(
 	ctx context.Context,
-	apiPath string,
+	apiEndpoint string,
 	method string,
 	contentType string,
 	queryParams url.Values,
 	body io.Reader,
 ) (*http.Request, error) {
-	u, err := url.Parse(c.config.APIEndpoint)
+	u, err := url.Parse(c.config.APIUrl)
 	if err != nil {
 		return nil, err
 	}
 
-	u.Path = path.Join(u.Path, APIPath1, apiPath)
+	u.Path = path.Join(u.Path, APIVerison, apiEndpoint)
 	u.RawQuery = queryParams.Encode()
 	req, err := http.NewRequest(method, u.String(), body)
 	if err != nil {
@@ -150,12 +150,10 @@ func (c *Client) do(
 	code := response.StatusCode
 	if code >= http.StatusBadRequest {
 		byt, _ := io.ReadAll(r)
-		res := &Error{
+		return &Error{
 			StatusCode: code,
 			RawError:   string(byt),
 		}
-
-		return res
 	}
 
 	if res == nil {
