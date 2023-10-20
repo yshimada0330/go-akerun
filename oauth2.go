@@ -13,3 +13,7 @@ func (c *Client) AuthCodeURL(state string, opts ...oauth2.AuthCodeOption) string
 func (c *Client) Exchange(ctx context.Context, code string, opts ...oauth2.AuthCodeOption) (*oauth2.Token, error) {
 	return c.config.Oauth2.Exchange(ctx, code, opts...)
 }
+
+func (c *Client) RefreshToken(ctx context.Context, token *oauth2.Token) (*oauth2.Token, error) {
+	return c.config.Oauth2.TokenSource(ctx, token).Token()
+}
