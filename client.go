@@ -13,27 +13,36 @@ import (
 	"golang.org/x/oauth2"
 )
 
-const (
-	APIUrl         = "https://api.akerun.com"
-	APIVerison     = "/v3"
-	Oauth2AuthURL  = "https://api.akerun.com/oauth/authorize"
-	Oauth2TokenURL = "https://api.akerun.com/oauth/token"
-)
+// APIUrl is the base URL for the Akerun API.
+const APIUrl = "https://api.akerun.com"
 
+// APIVerison is the version of the Akerun API.
+const APIVerison = "/v3"
+
+// Oauth2AuthURL is the URL for the Akerun OAuth2 authorization endpoint.
+const Oauth2AuthURL = "https://api.akerun.com/oauth/authorize"
+
+// Oauth2TokenURL is the URL for the Akerun OAuth2 token endpoint.
+const Oauth2TokenURL = "https://api.akerun.com/oauth/token"
+
+// Config represents the configuration for the Akerun client.
 type Config struct {
 	APIUrl string
 	Oauth2 *oauth2.Config
 }
 
+// Error represents an error returned by the Akerun API.
 type Error struct {
 	StatusCode int
 	RawError   string
 }
 
+// Error returns the error message.
 func (e *Error) Error() string {
 	return e.RawError
 }
 
+// NewConfig creates a new configuration for the Akerun client.
 func NewConfig(clientID, clientSecret, redirectURL string) *Config {
 	apiUrl := os.Getenv("AKERUN_API_URL")
 	if apiUrl == "" {
@@ -65,15 +74,18 @@ func NewConfig(clientID, clientSecret, redirectURL string) *Config {
 	}
 }
 
+// Client represents the Akerun client.
 type Client struct {
 	httpClient *http.Client
 	config     *Config
 }
 
+// NewClient creates a new Akerun client.
 func NewClient(config *Config) *Client {
 	return &Client{config: config}
 }
 
+// call sends a request to the Akerun API.
 func (c *Client) call(
 	ctx context.Context,
 	apiEndpoint string,
@@ -102,6 +114,7 @@ func (c *Client) call(
 	return c.do(ctx, oauth2Token, req, res)
 }
 
+// newRequest creates a new HTTP request for the Akerun API.
 func (c *Client) newRequest(
 	ctx context.Context,
 	apiEndpoint string,
@@ -130,6 +143,7 @@ func (c *Client) newRequest(
 	return req, nil
 }
 
+// do sends an HTTP request to the Akerun API.
 func (c *Client) do(
 	ctx context.Context,
 	oauth2Token *oauth2.Token,
