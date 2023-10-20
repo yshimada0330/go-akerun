@@ -38,7 +38,7 @@ func (c *Client) GetOrganizations(
 	if err != nil {
 		return nil, err
 	}
-	err = c.call(ctx, APIPathOrganizations, http.MethodGet, oauth2Token, v, nil, &result)
+	err = c.call_version(ctx, APIPathOrganizations, http.MethodGet, oauth2Token, v, nil, &result)
 	if err != nil {
 		return nil, err
 	}

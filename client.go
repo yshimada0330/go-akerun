@@ -85,6 +85,21 @@ func NewClient(config *Config) *Client {
 	return &Client{config: config}
 }
 
+// call_version calls the specified API endpoint with the given method, OAuth2 token, query parameters, post body, and response object.
+// It returns an error if the call fails.
+func (c *Client) call_version(
+	ctx context.Context,
+	apiEndpoint string,
+	method string,
+	oauth2Token *oauth2.Token,
+	queryParams url.Values,
+	postBody interface{},
+	res interface{},
+) error {
+	path := path.Join(APIVerison, apiEndpoint)
+	return c.call(ctx, path, method, oauth2Token, queryParams, postBody, res)
+}
+
 // call sends a request to the Akerun API.
 func (c *Client) call(
 	ctx context.Context,
@@ -128,7 +143,7 @@ func (c *Client) newRequest(
 		return nil, err
 	}
 
-	u.Path = path.Join(u.Path, APIVerison, apiEndpoint)
+	u.Path = path.Join(u.Path, apiEndpoint)
 	u.RawQuery = queryParams.Encode()
 	req, err := http.NewRequest(method, u.String(), body)
 	if err != nil {
