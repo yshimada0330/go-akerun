@@ -1,6 +1,12 @@
 # go-akerun
 Akerun API Client for Golang
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/yshimada0330/go-akerun.svg)](https://pkg.go.dev/github.com/yshimada0330/go-akerun)
+
+#### Links
+
+- [Akerun API](https://developers.akerun.com/)
+
 ## Installation
 ```sh
 $ go get -u github.com/yshimada0330/go-akerun
