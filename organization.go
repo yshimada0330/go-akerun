@@ -50,7 +50,7 @@ func (c *Client) GetOrganizations(
 	if err != nil {
 		return nil, err
 	}
-	err = c.call_version(ctx, APIPathOrganizations, http.MethodGet, oauth2Token, v, nil, &result)
+	err = c.callVersion(ctx, APIPathOrganizations, http.MethodGet, oauth2Token, v, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func (c *Client) GetOrganizations(
 // GetOrganization retrieves the details of an organization with the specified ID.
 func (c *Client) GetOrganization(ctx context.Context, oauth2Token *oauth2.Token, id string) (*OrganizationDetail, error) {
 	var result OrganizationDetail
-	err := c.call_version(ctx, path.Join(APIPathOrganizations, id), http.MethodGet, oauth2Token, nil, nil, &result)
+	err := c.callVersion(ctx, path.Join(APIPathOrganizations, id), http.MethodGet, oauth2Token, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}

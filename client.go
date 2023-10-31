@@ -13,17 +13,13 @@ import (
 	"golang.org/x/oauth2"
 )
 
-// APIUrl is the base URL for the Akerun API.
-const APIUrl = "https://api.akerun.com"
-
-// APIVerison is the version of the Akerun API.
-const APIVerison = "/v3"
-
-// Oauth2AuthURL is the URL for the Akerun OAuth2 authorization endpoint.
-const Oauth2AuthURL = "https://api.akerun.com/oauth/authorize"
-
-// Oauth2TokenURL is the URL for the Akerun OAuth2 token endpoint.
-const Oauth2TokenURL = "https://api.akerun.com/oauth/token"
+// Akerun API URLs
+const (
+	APIUrl         = "https://api.akerun.com"
+	APIVerison     = "/v3"
+	Oauth2AuthURL  = "https://api.akerun.com/oauth/authorize"
+	Oauth2TokenURL = "https://api.akerun.com/oauth/token"
+)
 
 // Config represents the configuration for the Akerun client.
 type Config struct {
@@ -87,7 +83,7 @@ func NewClient(config *Config) *Client {
 
 // call_version calls the specified API endpoint with the given method, OAuth2 token, query parameters, post body, and response object.
 // It returns an error if the call fails.
-func (c *Client) call_version(
+func (c *Client) callVersion(
 	ctx context.Context,
 	apiEndpoint string,
 	method string,
