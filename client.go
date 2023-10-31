@@ -72,8 +72,7 @@ func NewConfig(clientID, clientSecret, redirectURL string) *Config {
 
 // Client represents the Akerun client.
 type Client struct {
-	httpClient *http.Client
-	config     *Config
+	config *Config
 }
 
 // NewClient creates a new Akerun client.

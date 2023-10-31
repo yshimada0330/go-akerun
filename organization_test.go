@@ -18,7 +18,10 @@ func TestClient_GetOrganizations(t *testing.T) {
 		assert.Equal(t, "/v3/organizations", r.URL.Path)
 
 		// Write a sample response
-		w.Write([]byte(`{"organizations":[{"id":"org1"},{"id":"org2"}]}`))
+		_, err := w.Write([]byte(`{"organizations":[{"id":"org1"},{"id":"org2"}]}`))
+		if err != nil {
+			t.Fatal(err)
+		}
 	}))
 	defer ts.Close()
 
@@ -49,7 +52,10 @@ func TestClient_GetOrganization(t *testing.T) {
 		assert.Equal(t, "/v3/organizations/org1", r.URL.Path)
 
 		// Write a sample response
-		w.Write([]byte(`{"organization":{"id":"org1","name":"Test Org"}}`))
+		_, err := w.Write([]byte(`{"organization":{"id":"org1","name":"Test Org"}}`))
+		if err != nil {
+			t.Fatal(err)
+		}
 	}))
 	defer ts.Close()
 
