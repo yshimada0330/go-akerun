@@ -10,32 +10,32 @@ import (
 )
 
 const (
-	APIPathOrganizations = "organizations"
+	apiPathOrganizations = "organizations"
 )
 
-// Organization represents an organization in Akerun API.
-type Organization struct {
+// id represents an ID of an organization.
+type id struct {
 	ID string `json:"id"`
 }
 
-// Organizations represents a list of organizations in Akerun API.
-type Organizations struct {
-	Organizations []Organization `json:"organizations"`
+// OrganizationList represents a list of organizations in Akerun API.
+type OrganizationList struct {
+	Organizations []id `json:"organizations"`
 }
 
-// OrganizationDetail represents the detailed information of an organization.
-type OrganizationDetail struct {
-	Organization OrganizationRow `json:"organization"`
+// row represents a row in the organization table.
+type row struct {
+	Organization Organization `json:"organization"`
 }
 
-// OrganizationRow represents a row in the organization table.
-type OrganizationRow struct {
+// Organization represents the detailed information of an organization.
+type Organization struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }
 
-// OrganizationsParams represents the parameters for GetOrganizations method.
-type OrganizationsParams struct {
+// OrganizationsParameter represents the parameters for GetOrganizations method.
+type OrganizationsParameter struct {
 	Limit    uint32 `url:"limit,omitempty"`
 	IdAfter  string `url:"id_after,omitempty"`
 	IdBefore string `url:"id_before,omitempty"`
@@ -43,14 +43,14 @@ type OrganizationsParams struct {
 
 // GetOrganizations returns a list of organizations.
 func (c *Client) GetOrganizations(
-	ctx context.Context, oauth2Token *oauth2.Token, params OrganizationsParams) (*Organizations, error) {
+	ctx context.Context, oauth2Token *oauth2.Token, params OrganizationsParameter) (*OrganizationList, error) {
 
-	var result Organizations
+	var result OrganizationList
 	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}
-	err = c.callVersion(ctx, APIPathOrganizations, http.MethodGet, oauth2Token, v, nil, &result)
+	err = c.callVersion(ctx, apiPathOrganizations, http.MethodGet, oauth2Token, v, nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -58,11 +58,11 @@ func (c *Client) GetOrganizations(
 }
 
 // GetOrganization retrieves the details of an organization with the specified ID.
-func (c *Client) GetOrganization(ctx context.Context, oauth2Token *oauth2.Token, id string) (*OrganizationDetail, error) {
-	var result OrganizationDetail
-	err := c.callVersion(ctx, path.Join(APIPathOrganizations, id), http.MethodGet, oauth2Token, nil, nil, &result)
+func (c *Client) GetOrganization(ctx context.Context, oauth2Token *oauth2.Token, id string) (*Organization, error) {
+	var result row
+	err := c.callVersion(ctx, path.Join(apiPathOrganizations, id), http.MethodGet, oauth2Token, nil, nil, &result)
 	if err != nil {
 		return nil, err
 	}
-	return &result, nil
+	return &result.Organization, nil
 }
