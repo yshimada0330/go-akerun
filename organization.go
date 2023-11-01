@@ -18,8 +18,8 @@ type id struct {
 	ID string `json:"id"`
 }
 
-// Organizations represents a list of organizations in Akerun API.
-type Organizations struct {
+// OrganizationList represents a list of organizations in Akerun API.
+type OrganizationList struct {
 	Organizations []id `json:"organizations"`
 }
 
@@ -34,8 +34,8 @@ type Organization struct {
 	Name string `json:"name"`
 }
 
-// OrganizationsParams represents the parameters for GetOrganizations method.
-type OrganizationsParams struct {
+// OrganizationsParameter represents the parameters for GetOrganizations method.
+type OrganizationsParameter struct {
 	Limit    uint32 `url:"limit,omitempty"`
 	IdAfter  string `url:"id_after,omitempty"`
 	IdBefore string `url:"id_before,omitempty"`
@@ -43,9 +43,9 @@ type OrganizationsParams struct {
 
 // GetOrganizations returns a list of organizations.
 func (c *Client) GetOrganizations(
-	ctx context.Context, oauth2Token *oauth2.Token, params OrganizationsParams) (*Organizations, error) {
+	ctx context.Context, oauth2Token *oauth2.Token, params OrganizationsParameter) (*OrganizationList, error) {
 
-	var result Organizations
+	var result OrganizationList
 	v, err := query.Values(params)
 	if err != nil {
 		return nil, err

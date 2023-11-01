@@ -34,7 +34,7 @@ func TestClient_GetOrganizations(t *testing.T) {
 	client := NewClient(config)
 
 	// Call the GetOrganizations method with some test parameters
-	params := OrganizationsParams{Limit: 10}
+	params := OrganizationsParameter{Limit: 10}
 	token := &oauth2.Token{AccessToken: "test_token"}
 	orgs, err := client.GetOrganizations(context.Background(), token, params)
 
