@@ -73,6 +73,6 @@ func TestClient_GetOrganization(t *testing.T) {
 
 	// Check that the response was parsed correctly
 	assert.NoError(t, err)
-	assert.Equal(t, "org1", org.Organization.ID)
-	assert.Equal(t, "Test Org", org.Organization.Name)
+	assert.Equal(t, "org1", org.ID)
+	assert.Equal(t, "Test Org", org.Name)
 }
