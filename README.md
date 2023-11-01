@@ -2,7 +2,6 @@
 Akerun API Client for Golang
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/yshimada0330/go-akerun.svg)](https://pkg.go.dev/github.com/yshimada0330/go-akerun)
-
 ![example workflow](https://github.com/yshimada0330/go-akerun/actions/workflows/go.yml/badge.svg)
 
 #### Links
@@ -84,7 +83,7 @@ token := &oauth2.Token{
     AccessToken:  token.AccessToken,
     RefreshToken: token.RefreshToken,
 }
-params := &akerun.OrganizationsParams{
+params := &akerun.OrganizationsParameter{
     Limit: 100,
 }
 result, err := client.GetOrganizations(ctx, token, *params)
