@@ -28,5 +28,42 @@ jobs:
       with:
         skip-pkg-cache: true
 
-    - name: Test
-      run: go test -v ./...
+    # - name: Test
+    #   run: go test -v ./...
+
+    - uses: remarkablemark/setup-codeclimate@v2
+    - run: |
+        cc-test-reporter before-build
+        go test ./... -coverprofile c.out
+        sed -i.bak -e "s|github.com/yshimada0330/go-akerun|$(pwd)/github.com/yshimada0330/go-akerun|" c.out
+        cat c.out
+        cc-test-reporter after-build -t gocov --exit-code $?
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+
+
+    # - name: Test & publish code coverage
+    #   uses: paambaati/codeclimate-action@v5.0.0
+    #   env:
+    #     CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+    #   with:
+    #     coverageCommand: go test -coverprofile=${{github.workspace}}/c.out
+    #     coverageLocations: |
+    #       ${{github.workspace}}/c.out:gocov
+
+    # - name: Install CodeClimate Test Reporter
+    #   run: |
+    #     curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+    #     chmod +x ./cc-test-reporter
+    # - name: Install dependencies and run tests
+    #   run: |
+    #     ./cc-test-reporter before-build
+    #     go test -v -coverprofile=coverage.txt ./...
+    #     ./cc-test-reporter after-build --exit-code $EXIT_CODE
+    #     cc-test-reporter after-build --exit-code $?
+    # - name: Upload coverage to CodeClimate
+    #   run: |
+    #     ./cc-test-reporter format-coverage -t gocov -o codeclimate.json coverage.txt
+    #     ./cc-test-reporter upload-coverage -i codeclimate.json
+    #   env:
+    #     CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
