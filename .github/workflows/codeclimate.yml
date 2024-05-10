@@ -1,0 +1,26 @@
+name: CodeClimate
+
+on: [push]
+
+jobs:
+  codeclimate:
+    name: CodeClimate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: CodeClimate
+        uses: codeclimate/codeclimate-action@v1
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageCommand: go test ./... -coverprofile=c.out
+          coverageLocations: ${{github.workspace}}/c.out:gocov
+          prefix: ${{github.workspace}}
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: c.out
