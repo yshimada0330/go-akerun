@@ -9,18 +9,33 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '^1.20'
+          cache: true
+          cache-dependency-path: go.sum
+      - run: go version
+      - name: Install gcov2lcov
+        run: |
+          go install github.com/jandelgado/gcov2lcov@latest
+      - name: Generate coverage report
+        run: |
+          go test -coverprofile=coverage.out && \
+          gcov2lcov -infile=coverage.out -outfile=coverage.lcov
 
       - name: CodeClimate
-        uses: codeclimate/codeclimate-action@v1
+        uses: paambaati/codeclimate-action@v6.0.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
-          coverageCommand: go test ./... -coverprofile=c.out
-          coverageLocations: ${{github.workspace}}/c.out:gocov
-          prefix: ${{github.workspace}}
+          # coverageCommand: go test ./... -coverprofile=c.out
+          debug: true
+          coverageLocations: ${{github.workspace}}/coverage.lcov:lcov
+          # prefix: ${{github.workspace}}
 
-      - name: Upload coverage
-        uses: actions/upload-artifact@v2
-        with:
-          name: coverage
-          path: c.out
+      # - name: Upload coverage
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: coverage
+      #     path: c.out
