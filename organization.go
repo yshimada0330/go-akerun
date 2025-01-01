@@ -23,8 +23,8 @@ type OrganizationList struct {
 	Organizations []id `json:"organizations"`
 }
 
-// row represents a row in the organization table.
-type row struct {
+// organizationRow represents a row in the organization table.
+type organizationRow struct {
 	Organization Organization `json:"organization"`
 }
 
@@ -59,7 +59,7 @@ func (c *Client) GetOrganizations(
 
 // GetOrganization retrieves the details of an organization with the specified ID.
 func (c *Client) GetOrganization(ctx context.Context, oauth2Token *oauth2.Token, id string) (*Organization, error) {
-	var result row
+	var result organizationRow
 	err := c.callVersion(ctx, path.Join(apiPathOrganizations, id), http.MethodGet, oauth2Token, nil, nil, &result)
 	if err != nil {
 		return nil, err
